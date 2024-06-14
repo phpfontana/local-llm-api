@@ -1,7 +1,16 @@
-from typing import Optional, Dict, Any
+from typing import Optional, List
 from pydantic import BaseModel
 
 class EmbeddingsRequest(BaseModel):
-    model: str
-    prompt: str
-    options: Optional[Dict[str, Any]] = None
+    model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    query: Optional[str] = None
+
+class EmbeddingsResponse(BaseModel):
+    embeddings: List[float]
+
+class GenerateRequest(BaseModel):
+    model: str = "llama3"
+    prompt: Optional[str] = None
+
+class GenerateResponse(BaseModel):
+    response: str

@@ -1,0 +1,9 @@
+fastapi==0.111.0
+langchain==0.2.3
+langchain-community==0.2.4
+langchain-core==0.2.5
+langchain-huggingface==0.0.3
+langchain-text-splitters==0.2.1
+langsmith==0.1.77
+pymilvus
+transformers==4.41.2
