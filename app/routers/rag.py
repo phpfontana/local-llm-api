@@ -11,7 +11,9 @@ from app.services.embeddings import *
 from langchain_chroma import Chroma
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from langchain_core.prompts import PromptTemplate
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_core.prompts import ChatPromptTemplate
 
 
 # Instantiate router
@@ -54,29 +56,38 @@ async def main(prompt: str, file: UploadFile = File(...)):
         llm = load_llm_ollama(base_url=f"http://{OLLAMA_HOST}:{OLLAMA_PORT}")
 
         # Instantiate prompt template
-        template = """Use the following pieces of context to answer the question at the end.
-        If you don't know the answer, just say that you don't know, don't try to make up an answer.
-        Use three sentences maximum and keep the answer as concise as possible.
+        system_prompt = (
+            "You are an assistant for question-answering tasks. "
+            "Use the following pieces of retrieved context to answer "
+            "the question. If you don't know the answer, say that you "
+            "don't know. Use three sentences maximum and keep the "
+            "answer concise."
+            "\n\n"
+            "{context}"
+        )
 
-        {context}
-
-        Question: {question}
-
-        Helpful Answer:"""
-
-        custom_rag_prompt = PromptTemplate.from_template(template)
+        rag_prompt = ChatPromptTemplate.from_messages(
+            [
+                ("system", system_prompt),
+                ("human", "{input}"),
+            ]
+        )
         
         # Instantiate RAG chain
-        rag_chain = (
-            {"context": retriever, "question": RunnablePassthrough()}
-            |custom_rag_prompt
-            |llm
+        qa_chain = create_stuff_documents_chain(
+            llm, rag_prompt
+        )
+
+        rag_chain = create_retrieval_chain(
+            retriever, qa_chain
         )
 
         # Invoke RAG chain
-        response = rag_chain.invoke(prompt)
+        response = rag_chain.invoke(
+            {"input": prompt}
+        )
 
-        # TODO: 
+        # TODO: Add db support
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
