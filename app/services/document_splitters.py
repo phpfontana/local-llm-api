@@ -26,3 +26,4 @@ def split_documents(documents: List[Document], chunk_size:int=1000, chunk_overla
         raise Exception(f"Failed to split documents: {e}")
 
     return splits
+

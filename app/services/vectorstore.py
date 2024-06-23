@@ -1,4 +1,5 @@
 from typing import Any, Dict, List
+from langchain_core.vectorstores import VST
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 from langchain_core.vectorstores import VectorStore, VectorStoreRetriever
@@ -27,7 +28,7 @@ def load_vectorstore(vectorstore: VectorStore, documents: List[Document], embedd
 
     return vectorstore
 
-def load_retriever(vectorstore: VectorStore) -> VectorStoreRetriever:
+def load_retriever(vectorstore: VectorStore, **kwargs: Dict[str, Any]) -> VectorStoreRetriever:
     """
     Loads retriever from vectorstore.
 
@@ -39,7 +40,7 @@ def load_retriever(vectorstore: VectorStore) -> VectorStoreRetriever:
     """
     try:
         # Load retriever
-        retriever = vectorstore.as_retriever()
+        retriever = vectorstore.as_retriever(**kwargs)
     except Exception as e:
         raise Exception(f"Failed to load retriever: {e}")
 
@@ -65,3 +66,4 @@ def retrieve_documents(retriever: VectorStoreRetriever, query: str, search_type:
         raise Exception(f"Failed to retrieve documents: {e}")
 
     return documents
+

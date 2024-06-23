@@ -36,7 +36,7 @@ def load_llm_hf(model_id: str, task: str, **kwargs) -> BaseLLM:
 
     return llm
 
-def load_llm_ollama(model_name: str, base_url: str, **kwargs) -> BaseLLM:
+def load_llm_ollama(model_name:str='llama3:instruct', base_url:str=None, **kwargs) -> BaseLLM:
     """
     Load large language model from Ollama.
 
@@ -56,37 +56,3 @@ def load_llm_ollama(model_name: str, base_url: str, **kwargs) -> BaseLLM:
         raise ValueError(f"Error loading model {model_name}: {e}") from e        
     
     return llm
-    
-async def generate_response(prompt: str, llm: BaseLLM) -> Any:
-    """
-    Generate a response using large language model.
-
-    Args:
-        prompt (String): The user prompt.
-        llm (BaseLLM): The loaded language model.
-
-    Returns:
-        Any: The generated response or a streaming response
-    """
-    try:
-        return llm.invoke(prompt)
-    except Exception as e:
-        raise ValueError(f"Error generating: {str(e)}") from e
-
-
-async def generate_streaming_response(prompt: str, llm: BaseLLM) -> Any:
-    """
-    Generate a response using large language model.
-
-    Args:
-        promt (String): The llm prompt.
-        llm (BaseLLM): The loaded language model.
-
-    Returns:
-        Any: The generated streaming response.
-    """
-    try:
-        for chunks in llm.stream(prompt):
-            yield chunks
-    except Exception as e:
-        raise ValueError(f"Error generating: {str(e)}") from e

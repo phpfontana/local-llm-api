@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from typing import Dict, Any
 from app.schemas import EmbeddingsRequest, EmbeddingsResponse
-from app.utils.embeddings import *
+from app.services.embeddings import *
 
 
 # Instantiate router
@@ -32,3 +31,5 @@ async def main(request: EmbeddingsRequest):
         raise HTTPException(status_code=500, detail=f"Failed to generate embeddings: {e}")
     
     return {"embeddings": embeddings}
+
+

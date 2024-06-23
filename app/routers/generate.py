@@ -1,13 +1,15 @@
 from fastapi import APIRouter, HTTPException
+from app.config import OLLAMA_HOST, OLLAMA_PORT
 from app.schemas import GenerateRequest, GenerateResponse
-from app.utils.llms import *
+from app.services.llms import load_llm_ollama
+from app.services.generate import generate_response
 
 # Instantiate router
 router = APIRouter(
     prefix="/api/generate", tags=["generate"], responses={404: {"description": "Not found"}},
 )
 
-OLLAMA_BASE_URL = "http://ollama:11434"
+OLLAMA_URL = f"http://{OLLAMA_HOST}:{OLLAMA_PORT}"
 
 @router.post("/", response_model=GenerateResponse)
 async def main(request: GenerateRequest):
@@ -16,7 +18,7 @@ async def main(request: GenerateRequest):
     """
     try:
         # Load language model
-        llm = load_llm_ollama(request.model, OLLAMA_BASE_URL)
+        llm = load_llm_ollama(request.model, OLLAMA_URL)
         # Generate response
         response = await generate_response(request.prompt, llm)
     except Exception as e:
