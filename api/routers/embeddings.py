@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.schemas import EmbeddingsRequest, EmbeddingsResponse
-from app.services.embeddings import *
+from api.schemas import EmbeddingsRequest, EmbeddingsResponse
+from api.services.embeddings import *
 
 
 # Instantiate router

@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 
-from app.schemas import *
-from app.config import OLLAMA_HOST, OLLAMA_PORT
-from app.services.llms import load_llm_ollama
-from app.services.document_loaders import *
-from app.services.vectorstore import *
-from app.services.text_splitters import *
-from app.services.embeddings import *
+from api.schemas import *
+from api.config import OLLAMA_HOST, OLLAMA_PORT
+from api.services.llms import load_llm_ollama
+from api.services.document_loaders import *
+from api.services.vectorstore import *
+from api.services.text_splitters import *
+from api.services.embeddings import *
 
 from langchain_chroma import Chroma
 from langchain_core.output_parsers import StrOutputParser

@@ -2,7 +2,6 @@ from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_core.embeddings import Embeddings
 from typing import Optional, List
 
-
 def load_embeddings_model_hf(model_name: Optional[str]="sentence-transformers/all-MiniLM-L6-v2") -> Embeddings:
     """
     load embeddings model.

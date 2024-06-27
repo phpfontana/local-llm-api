@@ -18,8 +18,19 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./app/:/code/app/
+      - ./api/:/code/app/
     env_file:
       - .env
     depends_on:
       - ollama
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/mongodb:/data/db
+

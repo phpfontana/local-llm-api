@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict
 from pydantic import BaseModel
-from app.config import MILVUS_HOST, MILVUS_PORT
+from api.config import MILVUS_HOST, MILVUS_PORT
 from langchain_core.documents import Document
 
 class EmbeddingsRequest(BaseModel):

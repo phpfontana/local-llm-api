@@ -13,10 +13,10 @@ RUN pip3 install --upgrade pip
 RUN pip3 install --no-cache-dir -r /code/requirements.txt
 
 # Copy the backend directory to the container
-COPY ./app/ /code/app
+COPY ./api/ /code/api
 
 # Expose the port 80
 EXPOSE 80
 
 # Define the command to run the FastAPI app using uvicorn
-CMD ["fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "80", "--reload"]
+CMD ["fastapi", "run", "api/main.py", "--host", "0.0.0.0", "--port", "80", "--reload"]
