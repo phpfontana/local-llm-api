@@ -1,9 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import StreamingResponse
-from api.config import OLLAMA_HOST, OLLAMA_PORT
-from api.schemas import GenerateRequest, GenerateResponse
-from api.services.llms import load_llm_ollama, load_chat_ollama
-from api.services.generate import generate_response, generate_streaming_response
+from api.config import OLLAMA_URL
+from api.schemas.generate import *
+from api.services.generate import *
 
 
 # Instantiate router
@@ -11,16 +9,12 @@ router = APIRouter(
     prefix="/api/generate", tags=["generate"], responses={404: {"description": "Not found"}},
 )
 
-@router.post("/", response_model=GenerateResponse)
+@router.post("/", response_model=GenerateResponse, status_code=200)
 async def main(request: GenerateRequest):
     try:
-        llm = load_llm_ollama(request.model, base_url=f"http://{OLLAMA_HOST}:{OLLAMA_PORT}")
-        if request.stream:
-            return StreamingResponse(generate_streaming_response(request.prompt, llm))
-        else:
-            response = await generate_response(request.prompt, llm)
-            return {"response": response}
-    
+        llm = load_llm_ollama(request.model, base_url=OLLAMA_URL)
+        response = await generate_response(request.prompt, llm)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-        
+    
+    return GenerateResponse(response=response)

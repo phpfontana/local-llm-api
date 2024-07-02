@@ -1,49 +1,117 @@
-# trabalho-fp-2024-01
-Trabalho Fábrica de Projetos 02 - 2024/01
+# Local Llama3 Server
 
-## LLM RAG Server
+This is a production-ready local Llama3 server made with:
 
-Instantiate Milvus vectorstore, connect to milvus client. create a collection.
+* Ollama
+* Langchain
+* FastAPI
+* MongoDB
 
-@Generate
-- load ollama model
-- stream detections
+for a demo usage, go to tests/chat.py
 
-
-@load_documents
-- load document
-- split document based on markdown
-- store with HF embeddings model
-
-@retrieve_documents
-- instantiate milvus langchain client
-- as retriever + embedding
-- query
-
-https://python.langchain.com/v0.2/docs/integrations/vectorstores/milvus/ 
-
-@rag
-https://github.com/stephen37/Milvus_demo/blob/main/milvus_rag/rag_milvus_ollama.ipynb
-
-/api/generate/
-
-request body example
+## Generate Response
 ```
+POST /api/generate
+```
+
+**Parameters**
+* `model`: Specify the model to use.
+* `prompt`: The prompt or question to generate a response for.
+
+### Example
+**Request**
+```bash
+curl -X 'POST' \
+  'http://localhost/api/generate/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "model": "llama3:instruct",
+  "prompt": "What is the capital of France?"
+}'
+```
+
+**Response**
+```json
 {
-  "model": "llama3",
-  "prompt": "Hello World",
-  "stream": false,
-  "options": {}
+  "response": "The capital of France is Paris."
 }
 ```
 
-response
+## Chat Completion
+
 ```
+POST /api/chat
+```
+
+**Parameters**
+* `model`: Specify the model to use.
+* `prompt`: The initial prompt or question to start the chat.
+* `messages`: An array of message objects containing previous interactions.
+
+### Example
+**Request**
+```bash
+curl -X 'POST' \
+  'http://localhost/api/chat/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "model": "llama3:instruct",
+  "prompt": "What is your name?",
+  "messages": [
+    {
+        "role": "ai",
+        "content": "Hello! How can I help you today?"
+    },
+    {
+        "role": "user",
+        "content": "Hello, My name is John Doe"
+    },
+    {
+        "role": "ai",
+        "content": "Hello, John Doe! How can I help you today?"
+    }
+]
+}'
+```
+
+**Response**
+```json
 {
-  "model": "llama3",
-  "created_at": "2024-06-13 15:28:24",
-  "response": "Hello World! Nice to meet you! What brings you here today?",
-  "total duration": 5.958862066268921
+  "message": {
+    "role": "system",
+    "content": "Nice to meet you, John! My name is LoLLa3, Local LLama3 Assistant. I'm a chat assistant designed to assist and provide information on a wide range of topics. I'm here to help answer any questions or concerns you may have, so feel free to ask me anything!"
+  }
 }
 ```
 
+## Embeddings Generation
+
+```
+POST /api/embeddings
+```
+
+**Parameters**
+* `model`: Specify the model to use for generating embeddings.
+* `query`: The text to generate embeddings for.
+
+### Example
+**Request**
+```bash
+curl -X 'POST' \
+  'http://localhost/api/embeddings/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "model": "embedding-model",
+  "query": "Hello world"
+}'
+```
+
+**Response**
+```json
+{
+  "embeddings": [0.123, 0.456, 0.789, ...]
+}
+```

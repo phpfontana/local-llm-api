@@ -2,7 +2,7 @@ from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_core.embeddings import Embeddings
 from typing import Optional, List
 
-def load_embeddings_model_hf(model_name: Optional[str]="sentence-transformers/all-MiniLM-L6-v2") -> Embeddings:
+def load_embeddings_hf(model_name: Optional[str]="sentence-transformers/all-MiniLM-L6-v2") -> Embeddings:
     """
     load embeddings model.
 
@@ -38,7 +38,7 @@ def generate_document_embeddings(documents: List[str], embeddings_model: Embeddi
         raise Exception(f"Failed to generate document embeddings: {e}")
     return embeddings
 
-def generate_query_embeddings(query: str, embeddings_model: Embeddings) -> List[float]:
+def generate_embeddings(query: str, embeddings_model: Embeddings) -> List[float]:
     """
     Embed query.
 

@@ -26,23 +26,11 @@ services:
 
   mongo:
     image: mongo
-    container_name: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - "27017:27017"
     volumes:
-      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/mongodb/dbdata:/data/db
-      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/mongodb/db-seed:/db-seed
-      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/mongodb/datasets:/datasets
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/mongodb:/data/db
 
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: root
