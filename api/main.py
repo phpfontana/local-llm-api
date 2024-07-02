@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from api.routers import rag, embeddings, generate
+from api.routers import rag, embeddings, generate, vectorstore, qa
 
 # Initialize app
 app = FastAPI()
@@ -8,6 +8,8 @@ app = FastAPI()
 app.include_router(router=embeddings.router)
 app.include_router(router=generate.router)
 app.include_router(router=rag.router)
+app.include_router(router=vectorstore.router)
+app.include_router(router=qa.router)
 
 @app.get("/")
 def root():

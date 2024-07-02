@@ -31,7 +31,8 @@ async def generate_streaming_response(prompt: str, llm: BaseLLM) -> Any:
         Any: The generated streaming response.
     """
     try:
-        for chunks in llm.stream(prompt):
-            yield chunks
+        async for chunk in llm.astream(prompt):
+            content = chunk.replace("\n", "<br>")
+            yield content
     except Exception as e:
         raise ValueError(f"Error generating: {str(e)}") from e

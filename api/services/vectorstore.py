@@ -1,16 +1,16 @@
 from typing import Any, Dict, List
+from langchain_chroma import Chroma
 from langchain_core.vectorstores import VST
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 from langchain_core.vectorstores import VectorStore, VectorStoreRetriever
 
 
-def load_vectorstore(vectorstore: VectorStore, documents: List[Document], embeddings_model: Embeddings, **kwargs: Dict[str, Any]) -> VST:
+def load_chroma_vectorstore(documents: List[Document], embeddings_model: Embeddings, **kwargs: Dict[str, Any]) -> VST:
     """
-    Loads documents into vectorstore.
+    Loads documents into Chromadb.
 
     Args:
-        vectorstore (VectorStore): Vector store
         documents (List[Document]): List of documents
         embeddings_model (Embeddings): Embeddings model
         **kwargs: Keyword arguments
@@ -20,7 +20,7 @@ def load_vectorstore(vectorstore: VectorStore, documents: List[Document], embedd
     """
     try:
         # Load vectorstore
-        vectorstore = vectorstore.from_documents(
+        vectorstore = Chroma.from_documents(
             documents=documents, embedding=embeddings_model, **kwargs
         )
     except Exception as e:

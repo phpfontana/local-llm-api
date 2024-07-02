@@ -30,3 +30,29 @@ def split_markdown_text(text: str, headers_to_split_on: List[Tuple[str, str]], *
         raise Exception(f"Failed to split markdown document: {e}")
 
     return splits
+
+def split_text(text: List[str], chunk_size:int=1000, chunk_overlap:int=100, **kwargs: Dict[str, Any]) -> List[Document]:
+    """
+    Split text into sections.
+
+    Args:
+        text (str): Text
+        **kwargs: Keyword arguments
+
+    Returns:
+        List[Document]: List of documents
+
+    Raises:
+        Exception: If failed to split text
+    """
+    try:
+        # Instantiate text splitter
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size, chunk_overlap=chunk_overlap, **kwargs
+        )
+        # Split text
+        splits = text_splitter.create_documents(text)
+    except Exception as e:
+        raise Exception(f"Failed to split text: {e}")
+
+    return splits

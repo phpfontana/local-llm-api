@@ -10,7 +10,13 @@ dotenv.load_dotenv(dotenv_path)
 # Define environment variables
 OLLAMA_HOST = os.getenv("OLLAMA_HOST")
 OLLAMA_PORT = os.getenv("OLLAMA_PORT")
-MILVUS_HOST = os.getenv("MILVUS_HOST")
-MILVUS_PORT = os.getenv("MILVUS_PORT")
-MILVUS_URI = f"{MILVUS_HOST}:{MILVUS_PORT}"
+CHROMA_PATH = "./data/chroma_db"
+RAG_TEMPLATE = """
+Answer the question if necessary, use the following context to generate the answer:
 
+{context}
+
+---
+
+Answer the question, if necessary, use the following context to generate the answer: {question}
+"""
