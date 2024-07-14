@@ -1,14 +1,20 @@
 from fastapi import FastAPI
-from api.routers import generate, embeddings, chat, qa
+from fastapi.middleware.cors import CORSMiddleware
+from api.routers import embeddings, chat
 
 # Initialize app
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Include routers
-app.include_router(router=embeddings.router)
-app.include_router(router=generate.router)
 app.include_router(router=chat.router)
-app.include_router(router=qa.router)
+app.include_router(router=embeddings.router)
 
 @app.get("/")
 def root():

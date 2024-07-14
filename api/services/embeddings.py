@@ -1,10 +1,10 @@
-from langchain_huggingface.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings.llamacpp import LlamaCppEmbeddings
 from langchain_core.embeddings import Embeddings
-from typing import Optional, List
+from typing import List
 
-def load_embeddings_hf(model_name: Optional[str]="sentence-transformers/all-MiniLM-L6-v2") -> Embeddings:
+def load_embeddings(model_name: str, **kwargs):
     """
-    load embeddings model.
+    load embeddings model from HuggingFace.
 
     Args:
         model_name (str): Model name
@@ -13,8 +13,7 @@ def load_embeddings_hf(model_name: Optional[str]="sentence-transformers/all-Mini
         Embeddings: Embeddings model
     """
     try:
-        # Instantiate embeddings
-        embeddings_model = HuggingFaceEmbeddings(model_name=model_name, show_progress=True)
+        embeddings_model = LlamaCppEmbeddings(model_path=model_name, **kwargs)
     except Exception as e:
         raise Exception(f"Failed to load embeddings model: {e}")
     
@@ -32,7 +31,6 @@ def generate_document_embeddings(documents: List[str], embeddings_model: Embeddi
         List[List[float]]: List of embeddings
     """
     try:
-        # Embed documents
         embeddings = embeddings_model.embed_documents(documents)
     except Exception as e:
         raise Exception(f"Failed to generate document embeddings: {e}")
@@ -50,7 +48,6 @@ def generate_embeddings(query: str, embeddings_model: Embeddings) -> List[float]
         List[float]: Embedding
     """
     try:
-        # Embed query
         embedding = embeddings_model.embed_query(query)
     except Exception as e:
         raise Exception(f"Failed to generate query embeddings: {e}")    
