@@ -18,12 +18,12 @@ model_kwargs = {
     "top_k": 20,
     "top_p": 0.9,
     "n_threads": multiprocessing.cpu_count() - 1,
-    "seed": 42,
     "f16_kv": True,
     "vocab_only": False,
     "use_mlock": False,
     "max_tokens": 1024,
     "verbose": False,
+    "streaming": True,
 }
 
 @router.post("/", response_model=ChatResponse, status_code=200)
@@ -34,7 +34,7 @@ async def main(request: ChatRequest):
         if not request.stream:
             response = generate_reponse(chat_messages, llm)
             return ChatResponse(
-                model=request.model, message=Message(role="assistant", content=response.content), done=True,
+                message=Message(role="assistant", content=response.content), done=True,
             )
         else:
             pass
@@ -44,17 +44,25 @@ async def main(request: ChatRequest):
 
 """"
 {
-  "model": "Phi-3-mini-4k-instruct-q4.gguf",
+  "model": "Phi-3-mini-4k-instruct-fp16.gguf",
   "messages": [
     {
       "role": "system",
-      "content": "You are a chat assistant, always answer briefly and informatively."
+      "content": "You are a chat assistant, always answer briefly and informatively, use the chat history to generate the responses."
     },
    { 
       "role": "user",
-      "content": "Hello world"
-   }
+      "content": "My name is John"
+   },
+   {
+      "role": "assistant",
+      "content": "Hello John, how can I help you today?"
+   },
+    {
+        "role": "user",
+        "content": "What is my name?"
+    }
   ],
-  "stream": "false"
+  "stream": false
 }
 """

@@ -8,9 +8,8 @@ class Message(BaseModel):
 class ChatRequest(BaseModel):
     model: str  
     messages: List[Message]
-    stream: Optional[str] = False
+    stream: Optional[bool] = False
 
 class ChatResponse(BaseModel):
-    model: str
     message: Message
     done: bool
